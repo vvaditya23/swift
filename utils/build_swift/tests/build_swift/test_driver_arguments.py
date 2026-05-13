@@ -658,3 +658,33 @@ class TestDriverArgumentParser(
     def test_implied_defaults_swift_disable_dead_stripping(self):
         namespace = self.parse_default_args(['--swift-disable-dead-stripping'])
         self.assertTrue(namespace.swift_disable_dead_stripping)
+
+    def test_swift_pedantic_diagnostics(self):
+        def expectation(args, expected_value):
+            namespace = self.parse_default_args(args)
+            self.assertEqual(expected_value, namespace.swift_pedantic_diagnostics)
+
+        expectation(
+            ['--no-swift-pedantic-diagnostics', '--swift-pedantic-diagnostics'],
+            True)
+        expectation(
+            ['--swift-pedantic-diagnostics', '--no-swift-pedantic-diagnostics'],
+            False)
+        expectation(
+            ['--swift-assertions'],
+            True)
+        expectation(
+            ['--swift-assertions', '--swift-pedantic-diagnostics'],
+            True)
+        expectation(
+            ['--swift-assertions', '--no-swift-pedantic-diagnostics'],
+            False)
+        expectation(
+            ['--no-swift-assertions'],
+            False)
+        expectation(
+            ['--no-swift-assertions', '--swift-pedantic-diagnostics'],
+            True)
+        expectation(
+            [ '--no-swift-assertions', '--no-swift-pedantic-diagnostics'],
+            False)
